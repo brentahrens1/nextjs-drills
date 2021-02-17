@@ -1,14 +1,31 @@
+import { Component } from 'react'
+import fetch from 'isomorphic-unfetch'
+import Error from '../pages/_error'
 import Layout from "../components/Layout"
 
-import Link from 'next/link'
+export default class About extends Component {
+    static async getInitialProps() {
 
-const About = () => {
-    return (
-        <Layout title="About">
-            <Link href="/">Home</Link>
-            <img src="/static/newlogo.png" alt="logo" height="200px" />
-        </Layout>
-    )
+        const res = await fetch('https://api.github.com/users/brentahrens1')
+        const statusCode = res.status > 200 ? res.status : false
+        const data = await res.json()
+
+        return { user: data, statusCode }
+    }
+
+    render() {
+        const { user, statusCode } = this.props
+
+        if (statusCode) {
+            return <Error statusCode={statusCode} />
+        }
+
+        return (
+            <Layout title="About">
+                <p>{user.name}</p>
+                <img src={user.avatar_url} alt="My Avatar" height="200px" />
+            </Layout>
+        )
+    }
 }
 
-export default About

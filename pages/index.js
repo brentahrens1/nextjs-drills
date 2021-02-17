@@ -5,7 +5,6 @@ const Index = () => {
 
     return (
         <Layout title="Home">
-            <Link href="/about"><a>About</a></Link>
         </Layout>
     )
 }
